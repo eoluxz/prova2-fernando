@@ -1,3 +1,5 @@
+
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
@@ -7,6 +9,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-image: url('./i-made-a-vct-champions-wallpaper-v0-gelkui6bp1de1.webp');
 }
 
 div {
