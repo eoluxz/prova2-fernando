@@ -6,7 +6,7 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db = "api_video";
+$db = "api";
 
 $conn = new mysqli($host, $user, $pass, $db);
 
@@ -22,12 +22,12 @@ switch ($method) {
     case 'GET':
         if (isset($_GET['pesquisa'])) {
             $pesquisa = "%" . $_GET['pesquisa'] . "%";
-            $stmt = $conn->prepare("SELECT * FROM usuarios WHERE LOGIN LIKE ? OR NOME LIKE ?");
+            $stmt = $conn->prepare("SELECT * FROM vct WHERE LOGIN LIKE ? OR NOME LIKE ?");
             $stmt->bind_param("ss", $pesquisa, $pesquisa);
             $stmt->execute();
             $result = $stmt->get_result();
         } else {
-            $result = $conn->query("SELECT * FROM usuarios order by ID desc");
+            $result = $conn->query("SELECT * FROM vct order by ID desc");
         }
     
         $retorno = [];
@@ -42,8 +42,8 @@ switch ($method) {
     case 'POST':
 
         $data = json_decode(file_get_contents("php://input"), true);
-        $stmt = $conn->prepare("INSERT INTO usuarios (LOGIN, NOME, EMAIL, SENHA, ATIVO) VALUES (?, ?, ?, ?, ?)");  
-        $stmt->bind_param("ssssi", $data['LOGIN'], $data['NOME'], $data['EMAIL'], $data['SENHA'], $data['ATIVO']);
+        $stmt = $conn->prepare("INSERT INTO vct (NOME, TITULOS, IDADE, TIME, ATIVO) VALUES (?, ?, ?, ?, ?)");  
+        $stmt->bind_param("ssssi", $data['NOME'], $data['TITULOS'], $data['IDADE'], $data['TIME'], $data['ATIVO']);
         $stmt->execute();
 
         echo json_encode(["status" => "ok", "insert_id" => $stmt->insert_id]);
@@ -51,8 +51,8 @@ switch ($method) {
 
     case 'PUT':
         $data = json_decode(file_get_contents("php://input"), true);
-        $stmt = $conn->prepare("UPDATE usuarios SET LOGIN=?, NOME=?, EMAIL=?, SENHA=?, ATIVO=? WHERE ID=?");
-        $stmt->bind_param("ssssii", $data['LOGIN'], $data['NOME'], $data['EMAIL'], $data['SENHA'], $data['ATIVO'], $data['ID']);
+        $stmt = $conn->prepare("UPDATE vct SET NOME=?, TITULOS=?, IDADE=?, TIME=?, ATIVO=? WHERE ID=?");
+        $stmt->bind_param("ssssii", $data['NOME'], $data['TITULOS'], $data['IDADE'], $data['TIME'], $data['ATIVO'], $data['ID']);
         $stmt->execute();
 
         echo json_encode(["status" => "ok"]);
@@ -61,7 +61,7 @@ switch ($method) {
 
     case 'DELETE':
         $id = $_GET['id'];
-        $stmt = $conn->prepare("DELETE FROM usuarios WHERE ID=?");
+        $stmt = $conn->prepare("DELETE FROM vct WHERE ID=?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
 

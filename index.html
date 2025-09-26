@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Prova</title>
 </head>
 <body>
 
 <div>
     <input type="hidden" id="id">
-    <input type="text" id="login" placeholder="Login">
     <input type="text" id="nome" placeholder="Nome">
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="senha" placeholder="Senha">
+    <input type="text" id="titulos" placeholder="titulos">
+    <input type="text" id="idade" placeholder="idade">
+    <input type="text" id="time" placeholder="time">
     <select id="ativo">
         <option value="1">Ativo</option>
         <option value="0">Inativo</option>
@@ -31,11 +32,11 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Login</th>
             <th>Nome</th>
-            <th>Email</th>
-            <th>Ativo</th>
-            <th>Ações</th>
+            <th>titulos</th>
+            <th>idade</th>
+            <th>time</th>
+            <th>ativo</th>
         </tr>
     </thead>
     <tbody></tbody>
@@ -43,7 +44,7 @@
 
 <script>
 
-    const API_URL = "http://localhost/api/usuarios.php";
+    const API_URL = "https://localhost/prova2-fernando/jogadores.php";
 
     function carregar(pesquisa = "") {
     let url = API_URL;
@@ -57,14 +58,15 @@
             dados.forEach(usuario => {
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
-                    <td>${usuario.ID}</td>
-                    <td>${usuario.LOGIN}</td>
-                    <td>${usuario.NOME}</td>
-                    <td>${usuario.EMAIL}</td>
-                    <td>${usuario.ATIVO == 1 ? "Sim" : "Não"}</td>
+                    <td>${usuario.id}</td>
+                    <td>${usuario.nome}</td>
+                    <td>${usuario.titulos}</td>
+                    <td>${usuario.idade}</td>
+                    <td>${usuario.time}</td>
+                    <td>${usuario.ativo == 1 ? "Sim" : "Não"}</td>
                     <td>
                         <button onclick='editar(${JSON.stringify(usuario)})'>Editar</button>
-                        <button onclick='excluir(${usuario.ID})'>Excluir</button>
+                        <button onclick='excluir(${usuario.id})'>Excluir</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -81,13 +83,13 @@
 
     async function salvar() {
         const id = document.getElementById("id").value;
-        const login = document.getElementById("login").value;
         const nome = document.getElementById("nome").value;
-        const email = document.getElementById("email").value;
-        const senha = document.getElementById("senha").value;
+        const titulos = document.getElementById("titulos").value;
+        const idade = document.getElementById("idade").value;
+        const time = document.getElementById("time").value;
         const ativo = document.getElementById("ativo").value;
 
-        const payload = { ID: id, LOGIN: login, NOME: nome, EMAIL: email, SENHA: senha, ATIVO: ativo };
+        const payload = { ID: id, NOME: nome, TITULOS: titulos, IDADE: idade, TIME: time, ATIVO: ativo };
 
         if (id) {
             await fetch(API_URL, { method: "PUT", body: JSON.stringify(payload) });
@@ -100,12 +102,12 @@
         }
 
         function editar(usuario) {
-            document.getElementById("id").value = usuario.ID;
-            document.getElementById("login").value = usuario.LOGIN;
-            document.getElementById("nome").value = usuario.NOME;
-            document.getElementById("email").value = usuario.EMAIL;
-            document.getElementById("senha").value = usuario.SENHA;
-            document.getElementById("ativo").value = usuario.ATIVO;
+            document.getElementById("id").value = usuario.id;
+            document.getElementById("nome").value = usuario.nome;
+            document.getElementById("titulos").value = usuario.titulos;
+            document.getElementById("idade").value = usuario.idade;
+            document.getElementById("time").value = usuario.time;
+            document.getElementById("ativo").value = usuario.ativo;
         }
 
     async function excluir(id) {
@@ -116,11 +118,12 @@
     }
     function limpar() {
         document.getElementById("id").value = "";
-        document.getElementById("login").value = "";
         document.getElementById("nome").value = "";
-        document.getElementById("email").value = "";
-        document.getElementById("senha").value = "";
+        document.getElementById("titulos").value = "";
+        document.getElementById("idade").value = "";
+        document.getElementById("time").value = "";
         document.getElementById("ativo").value = "1";
+        
     }
 
 carregar();
